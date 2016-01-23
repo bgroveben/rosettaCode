@@ -1,5 +1,5 @@
-// http://rosettacode.org/wiki/100_doors
-/*
+/* 100 Doors
+http://rosettacode.org/wiki/100_doors#JavaScript
 Problem: You have 100 doors in a row that are all initially closed.
 You make 100 passes by the doors.
 The first time through, you visit every door and toggle the door (if closed, open it, and vice-versa).
