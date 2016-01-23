@@ -124,3 +124,58 @@ console.log();
 
 
 // Filtering with Array.filter()
+console.log((function () {
+  return rng(1, 100).filter(
+    function (x) {
+      var root = Math.sqrt(x);
+      return root === Math.floor(root);
+    }
+  );
+  // rng(1, 20) --> [1..20]
+  function rng(m, n) {
+    return Array.apply(null, Array(n - m + 1)).map(function (x, i) {
+      return m + i;
+    });
+  }
+})());
+console.log();
+
+// Or simply generating ...
+console.log((function () {
+  return rng(1, Math.sqrt(100)).map(function (x) {
+    return x * x;
+  });
+  // rng(1, 20) --> [1..20]
+  function rng(m, n) {
+    return Array.apply(null, Array(n - m + 1)).map(function (x, i) {
+      return m + i;
+    });
+  }
+})());
+console.log();
+
+
+// The following are for ES6:
+Array.apply(null, { length: 100 })
+  .map((v, i) => i + 1)
+  .forEach(door => {
+    var sqrt = Math.sqrt(door);
+    if (sqrt === (sqrt | 0)) {
+      console.log("Door %d is open", door);
+    }
+  });
+console.log();
+
+
+// Array comprehension style
+/*  This one doesn't want to run -- the debugger highlights the for after the opening square bracket
+[ for (i of Array.apply(null, { length: 100 })) i ].forEach((_, i) => {
+  var door = i + 1
+  var sqrt = Math.sqrt(door);
+
+  if (sqrt === (sqrt | 0)) {
+    console.log("Door %d is open", door);
+  }
+});
+console.log();
+*/
