@@ -7,6 +7,7 @@ The second time through, you only visit the second door(2,4,6,...) and toggle it
 The third time through, toggle every third door, and so on until you only visit the 100th door.
 Questions: What state are the doors in after the last pass? Which are open, and which are closed?
 */
+// The following are for ES5:
 // unoptimized (iterative)
 var doors = [];
 for (var i = 0; i < 100; i++) {
@@ -83,3 +84,43 @@ console.log();
 
 
 // optimized (functional)
+Array.apply(null, { length: 100 })
+  .map(function(v, i) { return i + 1; })
+    .forEach(function(door) {
+      var sqrt = Math.sqrt(door);
+
+      if (sqrt === (sqrt | 0)) {
+        console.log("Door %d is open", door);
+      }
+    });
+console.log();
+
+
+// Filtering with a list monad
+console.log((function () {
+  return chain(
+    rng(1, 100),
+    function (x) {
+      var root = Math.sqrt(x);
+      return root === Math.floor(root) ? inject(x) : fail();
+    }
+  );
+  // monadic Bind/chain for lists
+  function chain(xs, f) {
+    return [].concat.apply([], xs.map(f));
+  }
+  // monadic Return/inject for lists
+  function inject(x) { return [x]; }
+  // monadic Fail for lists
+  function fail() { return []; }
+  // rng(1, 20) --> [1..20]
+  function rng(m, n) {
+    return Array.apply(null, Array(n - m + 1)).map(function (x, i) {
+      return m + i;
+    });
+  }
+})());
+console.log();
+
+
+// Filtering with Array.filter()
