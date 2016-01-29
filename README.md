@@ -4,4 +4,4 @@ http://rosettacode.org/wiki/Category:JavaScript
 
 If I go start to finish in numeric and alphabetical order, I am here:
 
-http://rosettacode.org/wiki/A%2BB
+http://rosettacode.org/wiki/ABC_Problem
