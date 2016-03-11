@@ -87,3 +87,95 @@ var words = [
 
 for(var i = 0; i < words.length; ++i)
     console.log("Can make word (" +words[i]+")" + ": " + CheckWord(blocks, words[i]));
+console.log();
+
+
+// Functional using ES5
+
+console.log((function (strWords) {
+
+    var strBlocks =
+        'BO XK DQ CP NA GT RE TG QD FS JW HU VI AN OB ER FS LY PC ZM',
+        blocks = strBlocks.split(' ');
+
+    function abc(lstBlocks, strWord) {
+        var lngChars = strWord.length;
+
+        if (!lngChars) return [];
+
+        var b = lstBlocks[0],
+            c = strWord[0];
+
+        return chain(lstBlocks, function (b) {
+            return (b.indexOf(c.toUpperCase()) !== -1) ? [
+                (b + ' ').concat(
+                    abc(removed(b, lstBlocks), strWord.slice(1)))
+            ] : [];
+        })
+    }
+
+    // Monadic bind (chain) for lists
+    function chain(xs, f) {
+        return [].concat.apply([], xs.map(f));
+    }
+
+    // a -> [a] -> [a]
+    function removed(x, xs) {
+        var h = xs.length ? xs[0] : null,
+            t = h ? xs.slice(1) : [];
+
+        return h ? (
+            h === x ? t : [h].concat(removed(x, t))
+        ) : [];
+    }
+
+    function solution(strWord) {
+        var strAttempt = abc(blocks, strWord)[0].split(',')[0];
+
+        // two chars per block plus one space -> 3
+        return strWord + ((strAttempt.length === strWord.length * 3) ?
+            ' -> ' + strAttempt : ': [no solution]');
+    }
+
+    return strWords.split(' ').map(solution).join('\n');
+
+})('A BARK BOOK TREAT COMMON SQUAD CONFUSE'));
+console.log();
+
+
+// ES6
+/*  SyntaxError: Block-scoped declarations (let, const, function, class) not yet supported outside strict mode
+
+let characters = "BO XK DQ CP NA GT RE TG QD FS JW HU VI AN OB ER FS LY PC ZM";
+let blocks = characters.split(" ").map(pair => pair.split(""));
+
+function isWordPossible(word) {
+  var letters = [...word.toUpperCase()];
+  var length = letters.length;
+  var copy = new Set(blocks);
+
+  for (let letter of letters) {
+    for (let block of copy) {
+      let index = block.indexOf(letter);
+
+      if (index !== -1) {
+        length--;
+        copy.delete(block);
+        break;
+      }
+    }
+
+  }
+  return !length;
+}
+
+[
+  "A",
+  "BARK",
+  "BOOK",
+  "TREAT",
+  "COMMON",
+  "SQUAD",
+  "CONFUSE"
+].forEach(word => console.log(`${word}: ${isWordPossible(word)}`));
+*/
